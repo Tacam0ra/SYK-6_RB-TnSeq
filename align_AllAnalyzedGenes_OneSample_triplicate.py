@@ -1,7 +1,8 @@
+# align_AllAnalyzedGenes_OneSample_triplicate.py
 # READS IN THE LISTS OF ANALYZED GENES FROM BIOLOGICAL TRIPLICATE FITNESS EXPERIMENTS
 # OUTPUTS GENES THAT ARE COMMON TO ALL REPLICATES, ALONG WITH SCORES
 # T-TEST USED IS A ONE SAMPLE, TWO SIDED TEST WITH NULL HYPOTHESIS THAT MEAN OF THREE REPLICATES IS EQUAL TO ZERO
-# UPDATE, 2/10/22: ADJUSTS P-VALUES USING THE FDR CORRECTION (B-H PROCEDURE)
+# ADJUSTS P-VALUES USING THE FDR CORRECTION (BENJAMINI-HOCHBERG PROCEDURE), OUTPUTTING Q-VALUES
 
 import numpy as np
 from scipy.stats import ttest_1samp
@@ -9,11 +10,15 @@ import matplotlib.pyplot as plt
 import matplotlib.pylab as plb
 from mpl_toolkits.mplot3d import axes3d, Axes3D
 
-# load data from BarSeqProc
+# load data from BarSeqProc.py
 
-array1 = np.loadtxt('./fitness/7A_vs_13A_allAnalyzedGenes.csv', delimiter=',', skiprows=1, usecols=(0,1,2), dtype=str)
-array2 = np.loadtxt('./fitness/7B_vs_13B_allAnalyzedGenes.csv', delimiter=',', skiprows=1, usecols=(0,1,2), dtype=str)
-array3 = np.loadtxt('./fitness/7C_vs_13C_allAnalyzedGenes.csv', delimiter=',', skiprows=1, usecols=(0,1,2,3), dtype=str)
+data1 = 'rep1_allAnalyzedGenes.csv'     # these are the output files from BarSeqProc.py
+data2 = 'rep2_allAnalyzedGenes.csv'
+data3 = 'rep3_allAnalyzedGenes.csv'
+
+array1 = np.loadtxt(data1, delimiter=',', skiprows=1, usecols=(0,1,2), dtype=str)
+array2 = np.loadtxt(data2, delimiter=',', skiprows=1, usecols=(0,1,2), dtype=str)
+array3 = np.loadtxt(data3, delimiter=',', skiprows=1, usecols=(0,1,2,3), dtype=str)
 
 
 # identify genes for which all replicates contain data (i.e., gene not eliminated on count basis), then resort in order of gene rank
@@ -110,10 +115,10 @@ scatter = ax.scatter(x, y, z, c='b', alpha=0.5)
 ax.set_xlabel('NGF1')
 ax.set_ylabel('NGF2')
 ax.set_zlabel('NGF3')
-plt.title('NGFs_7-vs-13_1sampleTest')
+plt.title('NGFs_1sampleTest')
 
 
 # save outputs
 
-plt.savefig(('./fitness/stat_analysis/NGFs_7-vs-13_1sampleTest.png'),format='png', dpi=400, bbox_inches='tight', edgecolor='none')
-np.savetxt(('./fitness/stat_analysis/7-vs-13_1sampleTest_STATS.csv'), sharedValues_ALLstats[:,(3,0,1,2,4,5,6,7,8,9,10)], delimiter=',', fmt='%s', header='gene, 1samp_qValue, 1samp_tStat, 1samp_pValue, NGF_A, tLike_A, NGF_B, tLike_B, NGF_C, tLike_C, description', comments='')
+plt.savefig(('./fitness/stat_analysis/NGFs_1sampleTest.png'),format='png', dpi=400, bbox_inches='tight', edgecolor='none')
+np.savetxt(('./fitness/stat_analysis/1sampleTest_STATS.csv'), sharedValues_ALLstats[:,(3,0,1,2,4,5,6,7,8,9,10)], delimiter=',', fmt='%s', header='gene, 1samp_qValue, 1samp_tStat, 1samp_pValue, NGF_A, tLike_A, NGF_B, tLike_B, NGF_C, tLike_C, description', comments='')
