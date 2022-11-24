@@ -1,8 +1,8 @@
-# READS IN THE NGF SCORES FROM OUTPUT OF 20220202_align_AllAnalyzedGenes_OneSample_triplicate.py 
+# READS IN THE NGF SCORES FROM OUTPUT OF align_AllAnalyzedGenes_OneSample_triplicate.py 
 # OUTPUTS GENES THAT ARE COMMON TO THE THREE SETS, ALONG WITH SCORES
 # T-TEST USED IS A TWO SAMPLE, TWO SIDED TEST 
-# NULL HYPOTHESIS: MEANS OF THREE REPLICATE SETS (TEST + BaselineB, BOTH COMPARED TO BaselineA IN BARSEQ) ARE EQUAL
-# UPDATE, 2/10/22: ADJUSTS P-VALUES USING THE FDR CORRECTION (B-H PROCEDURE)
+# NULL HYPOTHESIS: THE MEAN GENE FITNESS OF THE TWO SETS OF TRIPLICATE ENRICHMENT CONDITIONS (BOTH COMPARED TO THE SAME BASELINE IN BARSEQ) ARE EQUAL
+# ADJUSTS P-VALUES USING THE FDR CORRECTION (BENJAMINI-HOCHBERG PROCEDURE)
 
 import numpy as np
 from scipy.stats import ttest_ind
@@ -11,18 +11,18 @@ import matplotlib.pylab as plb
 
 # load data from BarSeqProc
     
-array1 = np.loadtxt('./fitness/stat_analysis/10-vs-1_1sampleTest_STATS.csv', delimiter=',', usecols=(0,4,5,6,7,8,9,10), skiprows=1, dtype=str) # this is your BLB-vs-BLA sample set
-array2 = np.loadtxt('./fitness/stat_analysis/8-vs-1_1sampleTest_STATS.csv', delimiter=',', usecols=(0,4,5,6,7,8,9,10), skiprows=1, dtype=str) # this is your test-vs-BLA sample set
+array1 = np.loadtxt('enrichment1_1sampleTest_STATS.csv', delimiter=',', usecols=(0,4,5,6,7,8,9,10), skiprows=1, dtype=str) # this is one enrichment versus baseline sample set
+array2 = np.loadtxt('enrichment2_1sampleTest_STATS.csv', delimiter=',', usecols=(0,4,5,6,7,8,9,10), skiprows=1, dtype=str) # this is a second enrichment versus baseline sample set
 
 
-# identify genes for which both sets (test-vs-BLA and BLB-vs-BLA) contain data (i.e., gene not eliminated on count basis) 
+# identify genes for which both sets (enrichment1-vs-baseline and enrichment2-vs-baseline) contain data (i.e., gene not eliminated on count basis) 
 
 same = np.intersect1d((array1[:,0].astype(str)), (array2[:,0].astype(str)))
 same.sort()
 comparison = same.astype(str)
 
 
-# build an array that contains gene # and NGF values for both sets (test-vs-BLA and BLB-vs-BLA) of three replicates
+# build an array that contains gene # and NGF values for both sets (enrichment1-vs-baseline and enrichment2-vs-baseline) of three replicates
 
 sv1 = []
 sv2 = []
@@ -92,4 +92,4 @@ sharedValues_ALLstats = np.concatenate((qvalues[:,None],sharedValues_wStats), ax
 
 
 # save output 
-np.savetxt(('./fitness/stat_analysis/8-vs-10_2sampleTest_STATS.csv'), sharedValues_ALLstats[:,(3,0,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16)], delimiter=',', fmt='%s', header='gene, 2samp_qValue, 2samp_tStat, 2samp_pValue, NGF_BLB-vs-BLA_a, tLike_BLB-vs-BLA_a, NGF_BLB-vs-BLA_b, tLike_BLB-vs-BLA_b, NGF_BLB-vs-BLA_c, tLike_BLB-vs-BLA_c, NGF_test-vs-BLA_a, tLike_test-vs-BLA_a, NGF_test-vs-BLA_b, tLike_test-vs-BLA_b, NGF_test-vs-BLA_c, tLike_test-vs-BLA_c, description', comments='')
+np.savetxt(('2sampleTest_STATS.csv'), sharedValues_ALLstats[:,(3,0,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16)], delimiter=',', fmt='%s', header='gene, 2samp_qValue, 2samp_tStat, 2samp_pValue, NGF_BLB-vs-BLA_a, tLike_BLB-vs-BLA_a, NGF_BLB-vs-BLA_b, tLike_BLB-vs-BLA_b, NGF_BLB-vs-BLA_c, tLike_BLB-vs-BLA_c, NGF_test-vs-BLA_a, tLike_test-vs-BLA_a, NGF_test-vs-BLA_b, tLike_test-vs-BLA_b, NGF_test-vs-BLA_c, tLike_test-vs-BLA_c, description', comments='')
