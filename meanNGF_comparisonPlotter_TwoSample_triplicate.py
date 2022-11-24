@@ -1,7 +1,6 @@
-# INPUTS: ALL OUTPUT FILES (NGF SCORES, T-LIKE STATS, AND STATS) FROM TWO-SAMPLE ANALYSIS: 
-# C:\Users\ableem\Documents\3-PROJECTS\tn-seq\sequencing\SCRIPTS\20220202_align_AllAnalyzedGenes_TwoSample_triplicate.py 
-# OUTPUTS: PLOTS OF MEAN NGF SCORE (test-vs-BLA) VS. MEAN NGF SCORE (BLB-vs-BLA)
-# UPDATE 2/10/22: USE Q-VALUE INSTEAD OF P-VALUE AS CUTOFF FOR "STARRED" MARKER IN PLOTS
+# INPUTS: ALL OUTPUT FILES (NGF SCORES, T-LIKE STATS, AND STATS) FROM align_allAnalyzedGenes_TwoSample_triplicate.py 
+# OUTPUTS: PLOTS OF MEAN NGF SCORE (enrichment1-vs-baseline) VS. MEAN NGF SCORE (enrichment2-vs-baseline)
+# USE Q-VALUE CUTOFF FOR "STARRED" MARKERS IN PLOTS
 
 
 import numpy as np
@@ -12,7 +11,7 @@ import glob
 
 
 # set directory for file inputs/outputs
-workDir = './fitness/stat_analysis'
+workDir = '/your/working/directory'
 
 # load two-sample analysis files
 filenames = glob.glob(workDir+'/*_2sampleTest_STATS.csv')
@@ -169,7 +168,7 @@ for u in range(0, len(variablesList), 1):
 #    plt.ylabel('Average Test NGF')
 #    plt.title(title)
 #    plt.legend(('|x-y| > 1.5','p-value < 0.05'), bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
-#    plt.savefig('C:/Users/ableem/Documents/3-PROJECTS/tn-seq/sequencing/NGS_july2021/BarSeq/barseqR/fitness/two_mean_plots/'+title+'_2sample_NGFmeansPlot.png',format='png', dpi=400, bbox_inches='tight', edgecolor='none')
+#    plt.savefig(workDir/'+title+'_2sample_NGFmeansPlot.png',format='png', dpi=400, bbox_inches='tight', edgecolor='none')
 #
 #    
 #    
