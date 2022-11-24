@@ -1,4 +1,9 @@
-#!/users/bleema/anaconda3/bin/python
+############################################################################################################################################
+### BarSeqProc.py performs strain and gene fitness calculations as described in Wetmore et al., mBio (2015) (doi: 10.1128/mBio.00306-15) ###
+### This is a custom Python script translated from the original BarSeqR.pl code. ###########################################################
+############################################################################################################################################
+
+#!/usr/bin/python
 import numpy as np
 import pandas as pd
 from matplotlib import rc, font_manager
